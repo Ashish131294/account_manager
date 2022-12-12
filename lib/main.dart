@@ -1,4 +1,5 @@
 import 'package:account_manager/Dashbord.dart';
+import 'package:account_manager/insert.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screen_lock/flutter_screen_lock.dart';
@@ -57,6 +58,9 @@ class _passState extends State<pass> {
                             context: context,
                             correctString: '1234',
                           );
+                          /*Navigator.push(context, MaterialPageRoute(builder: (context) {
+                            return dashbord();
+                          },));*/
                         },
                         child: Text(
                           "CREATE PASSWORD",

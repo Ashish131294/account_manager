@@ -1,3 +1,4 @@
+import 'package:account_manager/insert.dart';
 import 'package:account_manager/mydrawer.dart';
 import 'package:flutter/material.dart';
 
@@ -12,14 +13,13 @@ class _dashbordState extends State<dashbord> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Dashbord"),
-        actions: [
+      appBar: AppBar(title: Text("Dashbord"),
+          /*actions: [
           IconButton(
               onPressed: () {
                 showDialog(
                   context: context,
-//useSafeArea: true,
+                               //useSafeArea: true,
                   //barrierColor: Colors.transparent,
                   builder: (context) {
                     return Column(
@@ -34,8 +34,15 @@ class _dashbordState extends State<dashbord> {
                 );
               },
               icon: Icon(Icons.more_vert))
-        ],
-      ),
+        ],*/
+          actions: [
+            PopupMenuButton(
+              itemBuilder: (context) => [
+                PopupMenuItem(child: Text("Save as PDF")),
+                PopupMenuItem(child: Text("Save as Excel")),
+              ],
+            )
+          ]),
       drawer: Drawer(
           child: ListView(
         children: [
@@ -93,6 +100,16 @@ class _dashbordState extends State<dashbord> {
           ),
         ],
       )),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(
+            builder: (context) {
+              return insert();
+            },
+          ));
+        },
+        child: Icon(Icons.add),
+      ),
     );
   }
 }
