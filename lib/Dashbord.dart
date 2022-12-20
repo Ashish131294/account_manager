@@ -1,6 +1,8 @@
+import 'package:account_manager/Dbhelper.dart';
 import 'package:account_manager/insert.dart';
 import 'package:account_manager/mydrawer.dart';
 import 'package:flutter/material.dart';
+import 'package:sqflite/sqflite.dart';
 
 class dashbord extends StatefulWidget {
   const dashbord({Key? key}) : super(key: key);
@@ -10,6 +12,23 @@ class dashbord extends StatefulWidget {
 }
 
 class _dashbordState extends State<dashbord> {
+  List<Map<String, Object?>> l = List.empty();
+  Database? db;
+
+  @override
+  void initState() {
+    super.initState();
+    getalldata();
+  }
+
+  getalldata() async {
+    // Get the records
+    Database db = await Dbhelper().createDatabase();
+    String qry = "SELECT * FROM Test";
+    List<Map<String, Object?>> l1 = await db!.rawQuery(qry);
+    l.addAll(l1);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -110,6 +129,15 @@ class _dashbordState extends State<dashbord> {
         },
         child: Icon(Icons.add),
       ),
+      body: GridView.builder(
+          itemBuilder: (context, index) {
+            Map m = l[index];
+            return ListTile(
+              leading: Text("${m['id']}"),
+            );
+          },
+          gridDelegate:
+              SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3)),
     );
   }
 }

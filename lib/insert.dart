@@ -1,5 +1,7 @@
 import 'package:account_manager/Dashbord.dart';
+import 'package:account_manager/Dbhelper.dart';
 import 'package:flutter/material.dart';
+import 'package:sqflite/sqflite.dart';
 
 class insert extends StatefulWidget {
   const insert({Key? key}) : super(key: key);
@@ -9,7 +11,17 @@ class insert extends StatefulWidget {
 }
 
 class _insertState extends State<insert> {
-  TextEditingController t1 = TextEditingController();
+  TextEditingController tname = TextEditingController();
+  Database? db;
+
+
+  @override
+  void initState() {
+    super.initState();
+    Dbhelper().createDatabase().then((value) {
+      db=value;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,32 +34,43 @@ class _insertState extends State<insert> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextField(
-              controller: t1,
-              decoration: InputDecoration(border: OutlineInputBorder(),
-              labelText: "Account Name"),
+              controller: tname,
+              decoration: InputDecoration(
+                  border: OutlineInputBorder(), labelText: "Account Name"),
             ),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ElevatedButton(onPressed: () {
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
-                  return dashbord();
-                },));
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushReplacement(context, MaterialPageRoute(
+                        builder: (context) {
+                          return dashbord();
+                        },
+                      ));
+                    },
+                    child: Text("Cancel")),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ElevatedButton(
+                    onPressed: () async {
+                      String name = tname.text;
 
-
-              }, child: Text("Cancel")),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ElevatedButton(onPressed: () {
-
-              }, child: Text("Save")),
-            )
-          ],)
-
+                      String qry ="insert into Test(name) values('$name')";
+                      int a=await db!.rawInsert(qry);
+                      print(a);
+                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+                        return dashbord();
+                      },));
+                    },
+                    child: Text("Save")),
+              )
+            ],
+          )
         ],
       ),
     );
